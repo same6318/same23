@@ -19,7 +19,7 @@ after "deploy:finished", "deploy:restart" #何でリスタート？=アプリに
 
 namespace :deploy do
   desc "Run seed"
-  blog :seed do
+  task :seed do
     on roles(:db) do
       with rails_env: fetch(:rails_env) do
         within current_path do
