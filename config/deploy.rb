@@ -10,6 +10,7 @@ set :rbenv_version, '3.3.0'
 
 append :linked_files, 'config/secrets.yml'
 set :linked_dirs, %w{log tmp/pids tmp/cache tmp/sockets public/uploads} #appndとの差？
+set :linked_files, %w{config/secrets.yml .env} #s3のアクセスキーがある環境変数を読み込むためのリンクを作る
 set :keep_releases, 5 #releasesディレクトリ内で保持するバージョンの個数を設定
 set :log_level, :info #エラーのログレベルを指定
 set :branch, 'main'
