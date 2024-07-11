@@ -29,7 +29,7 @@ namespace :deploy do
     end
   end
   desc "Restart application"
-  blog :restart do
+  task :restart do
     invoke "unicorn:restart"
   end
 end
