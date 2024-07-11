@@ -51,7 +51,7 @@
 # ------------------------------------
 server "3.112.253.54",
   user: "ec2-user",
-  roles: %w{web app},
+  roles: %w{web db app},
   ssh_options: {
     user: "ec2-user", # overrides user setting above
     keys: %w(/home/same06/.ssh/AWS_TEST2.pem), #ssh接続の際に必要となるローカルでの鍵の場所

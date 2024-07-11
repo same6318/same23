@@ -1,5 +1,5 @@
 # config valid for current version and patch releases of Capistrano
-lock "~> 3.19.1"
+lock "~> 3.19.1" #capistranoのバージョン
 
 #capistranoの設定
 set :application, "blog_app" #ec2に置かれるアプリケーション名
@@ -9,8 +9,31 @@ set :bundle_without, %w{test}.join(':') #gemのインストールをする設定
 set :rbenv_version, '3.3.0'
 
 append :linked_files, 'config/secrets.yml'
-
+set :linked_dirs, %w{log tmp/pids tmp/cache tmp/sockets public/uploads} #appndとの差？
+set :keep_releases, 5 #releasesディレクトリ内で保持するバージョンの個数を設定
+set :log_level, :info #エラーのログレベルを指定
 set :branch, 'main'
+
+after "deploy:published", "deploy:seed" #デプロイ時にseedデータを投入する
+after "deploy:finished", "deploy:restart" #何でリスタート？=アプリに機能を追加した後にリスタートしないと変更内容が反映されないから
+
+namespace :deploy do
+  desc "Run seed"
+  blog :seed do
+    on roles(:db) do
+      with rails_env: fetch(:rails_env) do
+        within current_path do
+          execute :bundle, :exec, :rake, "db:seed"
+        end
+      end
+    end
+  end
+  desc "Restart application"
+  blog :restart do
+    invoke "unicorn:restart"
+  end
+end
+
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 
